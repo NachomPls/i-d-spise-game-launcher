@@ -12,7 +12,7 @@
           <b-row>
             <b-col cols="2" v-for="game in overview.games" :key="game.exePath">
               <!-- dynamically generate games indem man parameter in Games mitgibt -->
-              <GameContainer />
+              <GameContainer v-bind:gameData="game"/>
             </b-col>
           </b-row>
           <hr />
@@ -33,7 +33,7 @@ import GameContainer from "../components/Game.vue";
 export default Vue.extend({
   name: "Games",
   components: {
-    GameContainer,
+    GameContainer
   },
   data: () => ({}),
   computed: {

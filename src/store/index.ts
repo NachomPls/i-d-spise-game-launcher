@@ -26,8 +26,8 @@ export default new Vuex.Store({
     deleteSections: (state, payload: Section[]): void => {
       state.sections = state.sections.filter(s => payload.map(p => p.name).filter(x => x == s.name).length === 0);
     },
-    addGameOverview: () => {},
-    removeGameOverview: () => {}
+    //addGameOverview: () => {},
+    //removeGameOverview: () => {}
   },
   actions: {},
   modules: {},

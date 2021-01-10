@@ -24,10 +24,21 @@
       :select-mode="selectMode"
       ref="selectedSections"
       @row-selected="onRowSelected"
-    ></b-table>
+    >
+      <template #cell(name)="data">
+        {{ data.item.name }}
+      </template>
+
+      <!-- A custom formatted column -->
+      <template #cell(paths)="data">
+          <b >{{ pathToString(data.item.paths) }}</b>
+      </template>
+    </b-table>
     <h3>{{ selectedSections }}</h3>
-    <b-button v-if="selected" v-on:click="deleteSelected">Delete Selected Sections</b-button>
-    <hr>
+    <b-button v-if="selected" v-on:click="deleteSelected">
+      Delete Selected Sections
+    </b-button>
+    <hr />
   </div>
 </template>
 
@@ -45,6 +56,7 @@ export default Vue.extend({
     path: "",
     selectMode: "multi",
     selectedSections: [] as Section[],
+    fields: ["name", "paths"],
   }),
   computed: {
     comp() {
@@ -55,28 +67,39 @@ export default Vue.extend({
     },
     selected() {
       return this.selectedSections.length > 0;
-    }
+    },
+    
   },
   methods: {
     // methods to get passed in template
     addSection() {
-        if (store.state.sections.filter(s => s.name == this.sectionName).length > 0) {
-            store.commit("addPathToSection", {
-            name: this.sectionName,
-            paths: [...store.state.sections.filter(s => s.name == this.sectionName)[0].paths, this.path] 
-            } as Section);
-        } else {
-            store.commit("addSection", {
-            name: this.sectionName,
-            paths : [this.path]
-            } as Section);
-        }
+      if (
+        store.state.sections.filter((s) => s.name == this.sectionName).length >
+        0
+      ) {
+        store.commit("addPathToSection", {
+          name: this.sectionName,
+          paths: [
+            ...store.state.sections.filter((s) => s.name == this.sectionName)[0]
+              .paths,
+            this.path,
+          ],
+        } as Section);
+      } else {
+        store.commit("addSection", {
+          name: this.sectionName,
+          paths: [this.path],
+        } as Section);
+      }
     },
     onRowSelected(sections: Section[]) {
       this.selectedSections = sections;
     },
     deleteSelected() {
       store.commit("deleteSections", this.selectedSections);
+    },
+    pathToString(paths: string[]) {
+      return paths.join(" | ")
     }
   },
 });

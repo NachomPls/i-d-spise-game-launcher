@@ -2,9 +2,9 @@
   <b-col>
     <b-img v-bind="mainProps" rounded alt="image"></b-img>
     <div class="text-wrap game-name">
-      test und jetz is der text länger mimimi
+      {{ this.gameData.name }}
     </div>
-    <b-button v-on:click="executeFile">Play</b-button>
+    <b-button v-on:click="executeFile()">Play</b-button>
   </b-col>
 </template>
 
@@ -16,18 +16,16 @@ import { Game } from "@/models/game";
 
 export default Vue.extend({
   name: "GameContainer",
-
+  props: ['gameData'],
   data: () => ({
     mainProps: {
       blank: true,
       blankColor: "#F0F",
       width: 120,
       height: 170,
-      class: "m1",
+      class: "m1"
     },
-    gameData: {
-      
-    } as Game
+
   }),
   methods: {
     // methods to get passed in template
@@ -35,7 +33,9 @@ export default Vue.extend({
       store.commit("count", 20);
     },
     executeFile() {
-      //ipcRenderer.send('execute-event', )
+      const exePath = this.gameData.exePath
+      console.log(exePath)
+      ipcRenderer.send('execute-event', exePath)
     },
   },
 });
