@@ -33,9 +33,7 @@ export default Vue.extend({
       store.commit("count", 20);
     },
     executeFile() {
-      const exePath = this.gameData.exePath
-      console.log(exePath)
-      ipcRenderer.send('execute-event', exePath)
+      ipcRenderer.send('execute-event', this.gameData.exePath)
     },
   },
 });
