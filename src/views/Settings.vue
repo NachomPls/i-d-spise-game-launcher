@@ -1,0 +1,83 @@
+<template>
+  <div>
+    <!-- add a new path -->
+    <b-row>
+      <b-col>
+        <h2>Sections</h2>
+      </b-col>
+      <b-col>
+        <b-input type="text" placeholder="name" v-model="sectionName" />
+      </b-col>
+      <b-col>
+        <b-input type="text" placeholder="path" v-model="path" />
+      </b-col>
+      <b-col>
+        <b-button v-on:click="addSection">add Section</b-button>
+      </b-col>
+    </b-row>
+    <!-- show all paths -->
+    <b-table
+      dark
+      hover
+      selectable
+      :items="sections"
+      :select-mode="selectMode"
+      ref="selectedSections"
+      @row-selected="onRowSelected"
+    ></b-table>
+    <h3>{{ selectedSections }}</h3>
+    <b-button v-if="selected" v-on:click="deleteSelected">Delete Selected Sections</b-button>
+    <hr>
+  </div>
+</template>
+
+<script lang="ts">
+import { GameOverview } from "@/models/game-overview";
+import { Section } from "@/models/section";
+import store from "@/store";
+import { shell } from "electron";
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "Settings",
+  data: () => ({
+    sectionName: "",
+    path: "",
+    selectMode: "multi",
+    selectedSections: [] as Section[],
+  }),
+  computed: {
+    comp() {
+      return this.sectionName;
+    },
+    sections() {
+      return store.state.sections;
+    },
+    selected() {
+      return this.selectedSections.length > 0;
+    }
+  },
+  methods: {
+    // methods to get passed in template
+    addSection() {
+        if (store.state.sections.filter(s => s.name == this.sectionName).length > 0) {
+            store.commit("addPathToSection", {
+            name: this.sectionName,
+            paths: [...store.state.sections.filter(s => s.name == this.sectionName)[0].paths, this.path] 
+            } as Section);
+        } else {
+            store.commit("addSection", {
+            name: this.sectionName,
+            paths : [this.path]
+            } as Section);
+        }
+    },
+    onRowSelected(sections: Section[]) {
+      this.selectedSections = sections;
+    },
+    deleteSelected() {
+      store.commit("deleteSections", this.selectedSections);
+    }
+  },
+});
+</script>

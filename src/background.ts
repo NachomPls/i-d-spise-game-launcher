@@ -1,8 +1,9 @@
 "use strict";
 
-import { app, protocol, BrowserWindow } from "electron";
+import { app, protocol, BrowserWindow, shell, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import { fstat } from "fs";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Scheme must be registered before the app is ready
@@ -13,8 +14,8 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1360,
+    height: 710,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -33,6 +34,17 @@ async function createWindow() {
     win.loadURL("app://./index.html");
   }
 }
+
+//register event for opening executables
+ipcMain.on("execute-event", async (event, args) => {
+  try {
+    //shell.openExternal("https://vuejs.org/v2/guide/list.html");
+    // shell.openExternal('https://github.com')
+    // shell.openPath('"F:\\Games\\EmptyYourMind\\S-Tier Visuals\\Gardenarium\\Gardenarium_11.3_WIN.exe"')
+  } catch (e) {
+    console.error(e)
+  }
+})
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
