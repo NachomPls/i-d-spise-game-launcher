@@ -93,7 +93,7 @@ export default Vue.extend({
       }
 
       // code for adding exePaths
-      store.commit("addGameOverview", {section, path: this.path});
+      store.commit("addGameOverviews", {section, path: this.path});
     },
     onRowSelected(sections: Section[]) {
       this.selectedSections = sections;
