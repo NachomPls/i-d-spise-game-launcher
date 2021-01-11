@@ -48,7 +48,7 @@ export default Vue.extend({
     // methods to get passed in template
     clickEvent() {
       store.commit("count", 20);
-    },
+  },
     currGameOverview(section: Section): GameOverview {
       const retGameOverview: GameOverview = {
         path: "test",
@@ -63,25 +63,29 @@ export default Vue.extend({
     getAllGameOverviewsFromSection(section: Section): GameOverview[] {
       const overviews: GameOverview[] = [];
 
-      section.paths.forEach((p, index) => {
-        const game1 = {
-          name: "Legend of Korra",
-          imgPath: "something",
-          exePath: p + "\\something",
-        } as Game;
-        const game2 = {
-          name: "Samorost 2",
-          imgPath: "something",
-          exePath: p + "\\woanders",
-        } as Game;
+      
 
-        overviews.push({
-          path: p,
-          games: index % 2 === 0 ? [game1, game2] : [game2, game1],
-          parentSection: section,
-        } as GameOverview);
-      });
+      // section.paths.forEach((p, index) => {
+      //   const game1 = {
+      //     name: "Legend of Korra",
+      //     imgPath: "something",
+      //     exePath: p + "\\something",
+      //   } as Game;
+      //   const game2 = {
+      //     name: "Samorost 2",
+      //     imgPath: "something",
+      //     exePath: p + "\\woanders",
+      //   } as Game;
+
+      //   overviews.push({
+      //     path: p,
+      //     games: index % 2 === 0 ? [game1, game2] : [game2, game1],
+      //     parentSection: section,
+      //   } as GameOverview);
+      // });
+      store.commit("addGameOverview",overviews);
       return overviews;
+
     },
   },
 });
