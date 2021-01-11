@@ -39,7 +39,7 @@ async function createWindow() {
 ipcMain.on("execute-event", async (event, args) => {
   try {
     //shell.openExternal("https://vuejs.org/v2/guide/list.html");
-    // shell.openExternal('https://github.com')
+     shell.openExternal('https://github.com')
     // shell.openPath('"F:\\Games\\EmptyYourMind\\S-Tier Visuals\\Gardenarium\\Gardenarium_11.3_WIN.exe"')
   } catch (e) {
     console.error(e)
