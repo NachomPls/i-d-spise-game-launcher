@@ -73,24 +73,27 @@ export default Vue.extend({
   methods: {
     // methods to get passed in template
     addSection() {
-      if (
-        store.state.sections.filter((s) => s.name == this.sectionName).length >
-        0
-      ) {
-        store.commit("addPathToSection", {
+      let section: Section;
+      if ( store.state.sections.filter((s) => s.name == this.sectionName).length > 0) {
+        section = {
           name: this.sectionName,
           paths: [
             ...store.state.sections.filter((s) => s.name == this.sectionName)[0]
               .paths,
             this.path,
           ],
-        } as Section);
+        } as Section
+        store.commit("addPathToSection", section);
       } else {
-        store.commit("addSection", {
+        section = {
           name: this.sectionName,
           paths: [this.path],
-        } as Section);
+        } as Section
+        store.commit("addSection", section);
       }
+
+      // code for adding exePaths
+      store.commit("addGameOverview", {section, path: this.path});
     },
     onRowSelected(sections: Section[]) {
       this.selectedSections = sections;
