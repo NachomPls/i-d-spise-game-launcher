@@ -3,7 +3,7 @@ import { Section } from "@/models/section";
 import Vue from "vue" ;
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import { creatGameOverviews } from "../utils/exeSearch"
+import { ExeSearcher } from "../utils/exeSearch"
 
 Vue.use(Vuex);
 
@@ -28,7 +28,8 @@ export default new Vuex.Store({
       state.sections = state.sections.filter(s => payload.map(p => p.name).filter(x => x == s.name).length === 0);
     },
     addGameOverviews: (state, payload): void => {
-      creatGameOverviews(payload.section, payload.path).forEach(gameOverview => {
+      const exeSearcher = new ExeSearcher();
+      exeSearcher.creatGameOverviews(payload.section, payload.path).forEach(gameOverview => {
         state.gameOverviews.push(gameOverview);
       })
     },
