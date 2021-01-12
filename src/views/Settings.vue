@@ -9,7 +9,7 @@
         <b-input type="text" placeholder="name" v-model="sectionName" />
       </b-col>
       <b-col>
-        <b-input type="text" placeholder="path" v-model="path" />
+        <b-input type="text" placeholder="path" v-model="path" /> 
       </b-col>
       <b-col>
         <b-button v-on:click="addSection">add Section</b-button>
@@ -74,6 +74,7 @@ export default Vue.extend({
     // methods to get passed in template
     addSection() {
       let section: Section;
+      //if(this.path.length === 0) this.path = "" //Custom Path for debug
       if ( store.state.sections.filter((s) => s.name == this.sectionName).length > 0) {
         section = {
           name: this.sectionName,

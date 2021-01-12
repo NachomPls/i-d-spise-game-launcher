@@ -1,57 +1,51 @@
 import { GameOverview } from "@/models/game-overview";
 import { Section } from "@/models/section";
-import { fstat } from "fs";
+import { Game } from "@/models/game";
+import { Dirent, fstat } from "fs";
 import fs from "fs";
 import { Queue } from 'queue-typescript';
-import  path  from "path";
+import path from "path";
 
 
 export class ExeSearcher {
 
     private queue: Queue<string> = new Queue<string>();
 
-    public creatGameOverviews(section: Section, path: string):GameOverview[] {
+    public creatGameOverviews(section: Section, path: string): GameOverview[] {
         const gameOverviews: GameOverview[] = [];
-    
-        //Get paths of game folders
+
         fs.readdir(path, { withFileTypes: true }, (err, files) => {
-            console.log({err, files});
-            files.forEach(file => this.queue.enqueue(path+"\\"+file.name));
-            while(this.queue.length > 0) {
-                const exePath:string = this.exeSearch(this.queue.dequeue());
-                if(exePath !== "") {
-                    //Exe found
-                    console.log("Found exe! -> "+exePath);
-                } 
+            files.forEach(file => this.queue.enqueue(path + "\\" + file.name));
+            while (this.queue.length > 0) {
+                const game = this.exeSearch(this.queue.dequeue());
+                if (game !== null) {
+                    const games: Game[] = [];
+                    games.push(game);
+                    gameOverviews.push({
+                        path: path,
+                        games: games,
+                        parentSection: section
+                    } as GameOverview);
+                }
             }
-                //this.queue.dequeue()
-                //this.queue.enqueue()
-                //Search folder for exe, on fail next folder in queue
-                //Recursion!
-                //const game1 = {
-                //     name: "Legend of Korra",
-                //     imgPath: "something",
-                //     exePath: p + "\\something",
-                //   }
-    
-                //Look at all files, find exe, find folders
-    
-    
-    
-                gameOverviews.push();
-            
         })
+        console.log(gameOverviews);
         return gameOverviews;
     }
 
-    exeSearch(gameDirectoryPath: string):string {
-        console.log("In exeSearch");
-        fs.readdir(gameDirectoryPath, { withFileTypes: true }, (err, files) => {
-            const exePathArray:string[] = files.filter((file) => path.extname(file.name).toLowerCase() === "exe").map(x=>x.name);
-            if(exePathArray.length > 0) {
-                return exePathArray[0];
-            }
+    exeSearch(gameDirectoryPath: string): Game {
+        const files = fs.readdirSync(gameDirectoryPath, { withFileTypes: true });
+        const exePathArray: string[] = files.filter((file) => path.extname(file.name).toLowerCase() === ".exe").map(x => x.name);
+        if (exePathArray.length > 0) {
+            return {
+                name: gameDirectoryPath.replace(/^.*[\\]/, ''),
+                imgPath: "Thumbnail",
+                exePath: gameDirectoryPath + "\\" + exePathArray[0]
+            } as Game
+        }
+        files.forEach(file => {
+            if (file.isDirectory()) { this.queue.enqueue(gameDirectoryPath + "\\" + file.name) }
         });
-        return "";
+        return null as any; //Cursed
     }
 }

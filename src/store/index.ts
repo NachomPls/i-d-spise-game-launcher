@@ -28,7 +28,7 @@ export default new Vuex.Store({
       state.sections = state.sections.filter(s => payload.map(p => p.name).filter(x => x == s.name).length === 0);
     },
     addGameOverviews: (state, payload): void => {
-      const exeSearcher = new ExeSearcher();
+      const exeSearcher: ExeSearcher = new ExeSearcher();
       exeSearcher.creatGameOverviews(payload.section, payload.path).forEach(gameOverview => {
         state.gameOverviews.push(gameOverview);
       })
